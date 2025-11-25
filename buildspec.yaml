@@ -16,7 +16,7 @@ phases:
     commands:
       - echo "Step 3: Running my bash script..."
       - chmod +x ./script.sh
-      - ./my-script.sh
+      - ./script.sh
       
   post_build:
     commands:
