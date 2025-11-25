@@ -1,0 +1,77 @@
+version: 0.2
+
+# Environment variables (optional)
+env:
+  variables:
+    ENVIRONMENT: "production"
+    APP_NAME: "my-app"
+  # parameter-store:
+  #   KEY: "/path/to/parameter"
+  # secrets-manager:
+  #   KEY: secret-id:json-key:version
+
+phases:
+  install:
+    # This phase is for installing packages/dependencies
+    runtime-versions:
+      # Specify runtime versions (nodejs, python, java, etc.)
+      # nodejs: 18
+      # python: 3.11
+    commands:
+      - echo "Installing dependencies..."
+      - apt-get update
+      # Add your installation commands here
+      # - apt-get install -y some-package
+      
+  pre_build:
+    # Commands to run before the build
+    commands:
+      - echo "Running pre-build tasks..."
+      - echo "Current directory: $(pwd)"
+      - echo "Listing files:"
+      - ls -la
+      # Add your pre-build commands here
+      
+  build:
+    # Main build commands
+    commands:
+      - echo "Starting build phase..."
+      - echo "Running custom bash script..."
+      
+      # Option 1: Run an external bash script from your repository
+      - chmod +x ./scripts/build.sh
+      - ./scripts/build.sh
+      
+      # Option 2: Inline bash commands
+      - |
+        echo "Running inline bash commands..."
+        for i in {1..3}; do
+          echo "Iteration $i"
+        done
+      
+  post_build:
+    # Commands to run after the build
+    commands:
+      - echo "Running post-build tasks..."
+      - echo "Build completed successfully!"
+      # Add cleanup or deployment commands here
+
+# Artifacts to upload to S3 (optional)
+artifacts:
+  files:
+    - '**/*'
+  # name: my-artifacts-$(date +%Y-%m-%d)
+  # base-directory: build
+
+# Cache dependencies to speed up builds (optional)
+cache:
+  paths:
+    - '/root/.npm/**/*'
+    # - 'node_modules/**/*'
+
+# Reports (optional) - for test results, code coverage, etc.
+# reports:
+#   pytest_reports:
+#     files:
+#       - 'test-results/*.xml'
+#     file-format: 'JUNITXML'
