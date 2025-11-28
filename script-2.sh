@@ -72,7 +72,7 @@ create_alarm() {
         --metric-name "ApproximateNumberOfMessagesVisible" \
         --dimensions "Name=QueueName,Value=$queue_name" \
         --statistic "Average" \
-        --period 300 \
+        --period 60 \
         --evaluation-periods 1 \
         --threshold "$ALARM_THRESHOLD" \
         --comparison-operator "GreaterThanOrEqualToThreshold" \
