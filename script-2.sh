@@ -3,7 +3,9 @@
 set -euo pipefail  # Exit on error, undefined variables, and pipe failures
 
 # Configuration
+QUEUE_URL="${QUEUE_URL:-}"
 QUEUE_NAME="${QUEUE_NAME:-not-provided}"
+# QUEUE_NAME="${QUEUE_NAME:-not-provided}"
 EVENT_TYPE="${EVENT_TYPE:-unknown}"
 AWS_REGION="${AWS_REGION:-us-west-2}"
 ALARM_THRESHOLD="${ALARM_THRESHOLD:-5}"
@@ -20,6 +22,13 @@ log_error() {
 
 log_success() {
     echo "[SUCCESS] $(date '+%Y-%m-%d %H:%M:%S') - $*"
+}
+
+# Extract queue name from queue URL
+extract_queue_name_from_url() {
+    local queue_url=$1
+    # Extract the last part after the last /
+    echo "$queue_url" | awk -F'/' '{print $NF}'
 }
 
 # Validation
@@ -124,6 +133,12 @@ delete_alarm() {
 main() {
     echo "=========================================="
     echo "SQS Queue CloudWatch Alarm Manager"
+    # If QUEUE_NAME is empty but QUEUE_URL is provided, extract it
+    if [[ "$QUEUE_NAME" == "not-provided" || -z "$QUEUE_NAME" ]] && [[ -n "$QUEUE_URL" ]]; then
+        log_info "Extracting queue name from URL: $QUEUE_URL"
+        QUEUE_NAME=$(extract_queue_name_from_url "$QUEUE_URL")
+        log_info "Extracted queue name: $QUEUE_NAME"
+    fi
     echo "=========================================="
     
     log_info "Starting script execution..."
