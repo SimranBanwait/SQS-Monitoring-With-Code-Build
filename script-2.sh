@@ -5,9 +5,9 @@ set -euo pipefail  # Exit on error, undefined variables, and pipe failures
 # Configuration
 QUEUE_NAME="${QUEUE_NAME:-not-provided}"
 EVENT_TYPE="${EVENT_TYPE:-unknown}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-ALARM_THRESHOLD="${ALARM_THRESHOLD:-200}"
-SNS_TOPIC_ARN="${SNS_TOPIC_ARN:-}"  # Optional: set this if you want alarm notifications
+AWS_REGION="${AWS_REGION:-us-west-2}"
+ALARM_THRESHOLD="${ALARM_THRESHOLD:-5}"
+SNS_TOPIC_ARN="${SNS_TOPIC_ARN:-arn:aws:sns:us-west-2:860265990835:test-topic}"
 
 # Logging functions
 log_info() {
@@ -64,32 +64,24 @@ create_alarm() {
         log_info "Alarm already exists: $alarm_name. Updating..."
     fi
     
-    # Build the alarm creation command
-    local alarm_cmd=(
-        aws cloudwatch put-metric-alarm
-        --alarm-name "$alarm_name"
-        --alarm-description "Alert when SQS queue $queue_name has $ALARM_THRESHOLD or more messages available"
-        --namespace "AWS/SQS"
-        --metric-name "ApproximateNumberOfMessagesVisible"
-        --dimensions "Name=QueueName,Value=$queue_name"
-        --statistic "Average"
-        --period 300
-        --evaluation-periods 1
-        --threshold "$ALARM_THRESHOLD"
-        --comparison-operator "GreaterThanOrEqualToThreshold"
-        --treat-missing-data "notBreaching"
-        --region "$AWS_REGION"
-    )
-    
-    # Add SNS topic if configured
-    if [[ -n "$SNS_TOPIC_ARN" ]]; then
-        alarm_cmd+=(--alarm-actions "$SNS_TOPIC_ARN")
-        log_info "SNS notifications enabled: $SNS_TOPIC_ARN"
-    fi
-    
-    # Execute the command
-    if "${alarm_cmd[@]}"; then
+    # Create the alarm with SNS notification
+    if aws cloudwatch put-metric-alarm \
+        --alarm-name "$alarm_name" \
+        --alarm-description "Alert when SQS queue $queue_name has $ALARM_THRESHOLD or more messages available" \
+        --namespace "AWS/SQS" \
+        --metric-name "ApproximateNumberOfMessagesVisible" \
+        --dimensions "Name=QueueName,Value=$queue_name" \
+        --statistic "Average" \
+        --period 300 \
+        --evaluation-periods 1 \
+        --threshold "$ALARM_THRESHOLD" \
+        --comparison-operator "GreaterThanOrEqualToThreshold" \
+        --treat-missing-data "notBreaching" \
+        --alarm-actions "$SNS_TOPIC_ARN" \
+        --region "$AWS_REGION"; then
+        
         log_success "CloudWatch alarm created/updated successfully: $alarm_name"
+        log_info "Email notifications will be sent to: $SNS_TOPIC_ARN"
         
         # Tag the alarm for better management
         aws cloudwatch tag-resource \
@@ -138,6 +130,7 @@ main() {
     log_info "Event Type: $EVENT_TYPE"
     log_info "Region: $AWS_REGION"
     log_info "Threshold: $ALARM_THRESHOLD messages"
+    log_info "SNS Topic: $SNS_TOPIC_ARN"
     
     # Validate inputs
     validate_inputs
