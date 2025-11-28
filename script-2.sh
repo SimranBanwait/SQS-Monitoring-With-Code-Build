@@ -127,6 +127,8 @@ main() {
     echo "=========================================="
     
     log_info "Starting script execution..."
+    log_info "DEBUG - Raw EVENT_TYPE value: '$EVENT_TYPE'"
+    log_info "DEBUG - Raw QUEUE_NAME value: '$QUEUE_NAME'"
     log_info "Queue Name: $QUEUE_NAME"
     log_info "Event Type: $EVENT_TYPE"
     log_info "Region: $AWS_REGION"
