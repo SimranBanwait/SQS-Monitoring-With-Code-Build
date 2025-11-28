@@ -78,6 +78,7 @@ create_alarm() {
         --comparison-operator "GreaterThanOrEqualToThreshold" \
         --treat-missing-data "notBreaching" \
         --alarm-actions "$SNS_TOPIC_ARN" \
+        --ok-actions "$SNS_TOPIC_ARN" \
         --region "$AWS_REGION"; then
         
         log_success "CloudWatch alarm created/updated successfully: $alarm_name"
