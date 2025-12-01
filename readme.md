@@ -4,6 +4,8 @@
 
 This project implements an automated workflow that creates and deletes CloudWatch alarms for SQS queues based on queue lifecycle events. When an SQS queue is created or deleted, the system automatically manages corresponding CloudWatch alarms that monitor message counts and send email notifications.
 
+![image alt]()
+
 ## Architecture
 
 ```
