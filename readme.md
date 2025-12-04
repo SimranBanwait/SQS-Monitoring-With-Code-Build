@@ -50,10 +50,6 @@ CloudTrail captures all SQS API calls (CreateQueue, DeleteQueue) and logs them.
 
 ![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/97445464fb98d50f302b4b4ad49d81add56526d7/assets/3-Eventbridgew%20rule.png)
 
-
-
-![CloudTrail S3 Path](screenshots/cloudtrail-s3.png)
-
 Events are stored in S3 for audit and compliance purposes.
 
 ![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/af8d96c5f47d7dcb6fa5e77271f2038f471139e1/assets/3-S3-Path.png)
