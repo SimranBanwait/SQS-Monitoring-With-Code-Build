@@ -37,19 +37,27 @@ SNS sends email notifications
 
 ### 1. SQS Queue
 
-![SQS Queue Creation](screenshots/sqs-queue.png)
-
 Standard SQS queues that trigger the automation workflow when created or deleted.
+in this example we are creating an SQS quue
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/97445464fb98d50f302b4b4ad49d81add56526d7/assets/1-Queue-created.png)
+
+
 
 ### 2. CloudTrail
 
-![CloudTrail Configuration](screenshots/cloudtrail.png)
-
 CloudTrail captures all SQS API calls (CreateQueue, DeleteQueue) and logs them.
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/97445464fb98d50f302b4b4ad49d81add56526d7/assets/3-Eventbridgew%20rule.png)
+
+
 
 ![CloudTrail S3 Path](screenshots/cloudtrail-s3.png)
 
 Events are stored in S3 for audit and compliance purposes.
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/af8d96c5f47d7dcb6fa5e77271f2038f471139e1/assets/3-S3-Path.png)
+
 
 ### 3. EventBridge Rule
 
