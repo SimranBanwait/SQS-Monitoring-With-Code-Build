@@ -44,6 +44,7 @@ in this example we are creating an SQS quue
 
 
 
+
 ### 2. CloudTrail
 
 CloudTrail captures all SQS API calls (CreateQueue, DeleteQueue) and logs them.
@@ -55,9 +56,10 @@ Events are stored in S3 for audit and compliance purposes.
 ![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/af8d96c5f47d7dcb6fa5e77271f2038f471139e1/assets/3-S3-Path.png)
 
 
+
+
 ### 3. EventBridge Rule
 
-![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/35e05723a06cf9d0c2143b34acb9df0d004dd7c5/assets/4-Eventbridgew%20rule.png)
 
 **Event Pattern:**
 ```json
@@ -70,6 +72,8 @@ Events are stored in S3 for audit and compliance purposes.
   }
 }
 ```
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/35e05723a06cf9d0c2143b34acb9df0d004dd7c5/assets/4-Eventbridgew%20rule.png)
 
 **Event Bridge Eelements:**
 
@@ -112,9 +116,12 @@ Events are stored in S3 for audit and compliance purposes.
 
 ![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/532572a0c019ede30866c531269961efc183799c/assets/6-event-bridge-input-tranformer.png)
 
+
+
+
 ### 4. CodeBuild Project
 
-![CodeBuild Execution](screenshots/codebuild-execution.png)
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/24923a7e02c6045d03624bc49fd6734f761262f6/assets/7-Code-build.png)
 
 CodeBuild executes the bash script with environment variables passed from EventBridge.
 
@@ -150,9 +157,25 @@ phases:
       - echo "Execution completed at $(date)"
 ```
 
+CodeBuild executes the bash script with environment variables passed from EventBridge.
+
+Codebuild execution Started once SQS Create Queue Event is detected.
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/d2f480ccb85d9963d6d0dacdf386474267c054d4/assets/9-Execution-Started-Logs.png)
+
+Codebuild execution logs shows, script execution is completed.
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/d2f480ccb85d9963d6d0dacdf386474267c054d4/assets/14-Codebuild-logs-script-executio-completed.png)
+
+Codebuild execution completed and the environment varibales value is showing
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/d2f480ccb85d9963d6d0dacdf386474267c054d4/assets/10-codebuild-env-variables.png)
+
+
+
+
 ### 5. CloudWatch Alarm
 
-![CloudWatch Alarm](screenshots/cloudwatch-alarm.png)
 
 The script creates alarms with the following configuration:
 - **Metric**: `ApproximateNumberOfMessagesVisible`
@@ -162,18 +185,37 @@ The script creates alarms with the following configuration:
 - **Statistic**: Average
 - **Actions**: Sends notifications to SNS on ALARM and OK states
 
-### 6. SNS Topic
+Cloudwatch alarm creation started.
 
-![SNS Topic](screenshots/sns-topic.png)
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/d2f480ccb85d9963d6d0dacdf386474267c054d4/assets/11-Cloudwatch-alarm-creatio-started.png)
+
+
+
+
+### 6. SNS Topic
 
 SNS topic handles email notifications:
 - **Topic ARN**: `arn:aws:sns:us-west-2:860265990835:test-topic`
 - **Subscriptions**: Email subscription for alerts
 - **Protocol**: Email
 
+SNS TOPIC That the newly created cloudwatch alarm use to send email alerts.
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/d2f480ccb85d9963d6d0dacdf386474267c054d4/assets/13-SNS-Topic-Used.png)
+
+
+### 7. Alert Received 
+
+Once the alarm is created an email alert is also received as a confirmation.
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/d2f480ccb85d9963d6d0dacdf386474267c054d4/assets/12-Alarm-Creation-Alert-received.png)
+
+
+
+
 ## Files
 
-### script-2.sh
+### script.sh
 
 The main automation script that:
 1. Extracts queue name from queue URL (for delete events)
@@ -433,16 +475,13 @@ Contributions are welcome! Please:
 4. Push to the branch
 5. Create a Pull Request
 
-## License
-
-MIT License - See LICENSE file for details
 
 ## Author
 
-**DevOps Team**
+**Simran Banwait**
 
 For questions or support, please open an issue in the GitHub repository.
 
 ---
 
-**Last Updated**: November 2025
+**Last Updated**: December 2025
