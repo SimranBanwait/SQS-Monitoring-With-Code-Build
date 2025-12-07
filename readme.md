@@ -71,11 +71,12 @@ Events are stored in S3 for audit and compliance purposes.
 }
 ```
 
-![EventBridge Event Pattern](screenshots/eventbridge-pattern.png)
+**Event Bridge Eelements:**
+
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/532572a0c019ede30866c531269961efc183799c/assets/5-event-bridge-elements.png)
 
 **Input Transformer:**
 
-![EventBridge Transformer](screenshots/eventbridge-transformer.png)
 
 *Input Path:*
 ```json
@@ -109,7 +110,7 @@ Events are stored in S3 for audit and compliance purposes.
 }
 ```
 
-![EventBridge Target](screenshots/eventbridge-target.png)
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/532572a0c019ede30866c531269961efc183799c/assets/6-event-bridge-input-tranformer.png)
 
 ### 4. CodeBuild Project
 
