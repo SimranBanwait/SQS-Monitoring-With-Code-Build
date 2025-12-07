@@ -57,7 +57,7 @@ Events are stored in S3 for audit and compliance purposes.
 
 ### 3. EventBridge Rule
 
-![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/4f0a9eab05ca87140433b561629238eea8da48cb/assets/4-Eventbridgew%20rule.png)
+![image alt](https://github.com/SimranBanwait/SQS-Monitoring-With-Code-Build/blob/35e05723a06cf9d0c2143b34acb9df0d004dd7c5/assets/4-Eventbridgew%20rule.png)
 
 **Event Pattern:**
 ```json
